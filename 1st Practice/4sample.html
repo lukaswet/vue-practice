@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link href="css/styles.css" rel="stylesheet">
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sample">
+            <input type="text" v-model="firstName">
+            <hr>
+            <input type="text" v-model="lastName">
+            <hr>
+            <input type="text" v-model="promo">
+
+            <h2>Hello, {{ fullName }}</h2>   
+            <button class="btn btn-success" @click="showText = !showText">Name</button>
+            <div v-show="showText">Your sale is {{ sale }} %</div>
+        </div>
+    </div>
+    <script>
+        function getSale(code, callback){
+            let codes = {
+                newYear: 10,
+                some: 20
+            };
+
+            let sale = (codes[code] !== undefined) ? codes[code] : 0;
+
+            setTimeout(() => {
+                callback(sale);
+            }, 3000);
+
+            return sale;
+        }
+
+
+        let sample = new Vue({
+            el: '.sample',
+            data: {
+                firstName: '',
+                lastName: '',
+                promo: '',
+                showText: false,
+                sale: 0
+            },
+            computed: {
+                fullName(){
+                    return this.firstName + ' ' + this.lastName;
+                },
+                sale(){
+                    return getSale(this.promo)
+                }
+            },
+            watch: {
+                promo(){
+                    getSale(this.promo, (sale) => {
+                        this.sale = sale;
+                    });
+                }
+            }
+
+        }); 
+
+    </script>
+</body>
+</html>
